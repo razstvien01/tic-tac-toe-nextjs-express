@@ -1,15 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a; /* gray-900 */
+  --background: #0a0a0a;
   --foreground: #ededed;
-  --primary: #2563eb; /* blue-600 */
-  --primary-hover: #1d4ed8; /* blue-700 */
-  --secondary: #16a34a; /* green-600 */
-  --secondary-hover: #15803d; /* green-700 */
-  --hover: #374151; /* gray-700 */
-
-  --font-sans: 'Arial', sans-serif;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary: #16a34a;
+  --secondary-hover: #15803d;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --hover: #374151;
+  --card: #1f2937;
+  --border: #374151;
+  --font-sans: "Inter", "Arial", sans-serif;
 }
 
 body {
@@ -18,9 +23,86 @@ body {
   font-family: var(--font-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.8), 0 0 30px rgba(37, 99, 235, 0.6);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes winner-celebration {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+.bounce-in {
+  animation: bounce-in 0.3s ease-out;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.slide-up {
+  animation: slide-up 0.5s ease-out;
+}
+
+.winner-celebration {
+  animation: winner-celebration 0.6s ease-in-out infinite;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #2563eb, #16a34a, #f59e0b);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
