@@ -9,7 +9,7 @@ export default function RecentResults({ history }: { history: string[] }) {
       </h3>
 
       {history.length > 0 ? (
-        <div className="space-y-2 max-h-40 overflow-y-auto">
+        <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
           {history
             .slice(-5)
             .reverse()
