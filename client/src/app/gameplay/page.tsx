@@ -277,14 +277,7 @@ export default function Gameplay() {
           </div>
 
           {/* Game History */}
-          <div className="bg-[var(--card)] p-4 rounded-xl border border-[var(--border)]">
-            <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-              <Crown className="w-5 h-5 text-yellow-400" />
-              Recent Results
-            </h3>
-
-            <RecentResults history={gameHistory} />
-          </div>
+          <RecentResults history={gameHistory} />
 
           {/* Achievement Progress */}
           <div className="md:col-span-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-6 rounded-2xl border border-purple-500/30">
