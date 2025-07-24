@@ -27,7 +27,7 @@ export default function WinnerModal({
           ✕
         </button>
 
-        <div className="text-center winner-celebration">
+        <div className="text-center">
           <div className="text-6xl mb-4">{winner === "Draw" ? "🤝" : "🏆"}</div>
           <div className="text-3xl font-bold text-yellow-400 mb-2">
             {winner === "Draw" ? "It's a Draw!" : `${winnerName} Wins!`}
