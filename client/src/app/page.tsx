@@ -1,3 +1,5 @@
+'use client';
+
 import Head from "next/head";
 import Link from "next/link";
 
@@ -13,7 +15,7 @@ export default function Home() {
         </h1>
         <Link
           href="/new-game"
-          className="px-6 py-3 bg-[var(--secondary)] hover:bg-[var(--hover)] text-white rounded-xl"
+          className="px-6 py-3 bg-[var(--secondary)] hover:bg-[var(--secondary-hover)] text-white rounded-xl transition-colors duration-200"
         >
           Start New Game
         </Link>
