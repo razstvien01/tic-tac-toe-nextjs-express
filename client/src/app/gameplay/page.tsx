@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { RotateCcw, Home, Crown, Target, Zap } from "lucide-react";
 import Link from "next/link";
+import { GameCard, GameTile, WinnerModal, RecentResults } from "@/components";
 
 export default function Gameplay() {
   const router = useRouter();
@@ -138,97 +139,59 @@ export default function Gameplay() {
             <span className="text-green-400 font-semibold">{player2} (O)</span>
           </div>
         </div>
-        {/* Current Turn Indicator */}
+
         {winner && showWinner && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-            <div className="bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 border border-yellow-400 p-8 rounded-2xl max-w-md w-full animate-slide-up relative">
-              <button
-                onClick={() => setShowWinner(false)}
-                className="absolute top-3 right-3 text-yellow-300 hover:text-white transition"
-                aria-label="Close winner announcement"
-              >
-                ✕
-              </button>
-
-              <div className="text-center winner-celebration">
-                <div className="text-6xl mb-4">
-                  {winner === "Draw" ? "🤝" : "🏆"}
-                </div>
-                <div className="text-3xl font-bold text-yellow-400 mb-2">
-                  {winner === "Draw"
-                    ? "It's a Draw!"
-                    : `${getWinnerName()} Wins!`}
-                </div>
-                <div className="text-lg text-gray-200">
-                  {winner === "Draw"
-                    ? "Both players played well."
-                    : `Congratulations, ${getWinnerName()}!`}
-                </div>
-
-                <div className="flex justify-center mt-6 gap-4">
-                  <button
-                    onClick={() => {
-                      resetBoard();
-                      setShowWinner(false);
-                    }}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
-                  >
-                    Continue
-                  </button>
-                  <button
-                    onClick={stopGame}
-                    className="px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700"
-                  >
-                    Stop
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <WinnerModal
+            winner={winner}
+            winnerName={getWinnerName()}
+            onClose={() => setShowWinner(false)}
+            onContinue={() => {
+              resetBoard();
+              setShowWinner(false);
+            }}
+            onStop={stopGame}
+          />
         )}
-        
+
         {/* Main Game Container */}
         <div className="flex flex-col md:flex-row gap-8 items-start justify-center w-full px-4 mb-6">
           {/* Scoreboard Section (Left on large screens) */}
           <div className="w-full md:w-1/3 space-y-4">
-            <div className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 p-6 rounded-2xl border border-blue-500/30 text-center">
-              <div className="text-blue-400 text-lg font-semibold mb-2">
-                {player1}
-              </div>
-              <div className="text-4xl font-bold text-blue-400 mb-1">
-                {score.X}
-              </div>
-              <div className="text-sm text-gray-400">
-                {player1WinRate}% win rate
-              </div>
-              <div className="text-xs text-blue-300 mt-1">Playing as X</div>
-            </div>
+            <GameCard
+              title={player1}
+              value={score.X}
+              subtitle={`${player1WinRate}% win rate`}
+              note="Playing as X"
+              gradientFrom="from-blue-500/20"
+              gradientTo="to-blue-600/20"
+              borderColor="border-blue-500/30"
+              textColor="text-blue-400"
+              noteColor="text-blue-300"
+            />
 
-            <div className="bg-gradient-to-r from-gray-500/20 to-gray-600/20 p-6 rounded-2xl border border-gray-500/30 text-center">
-              <div className="text-gray-400 text-lg font-semibold mb-2">
-                Draws
-              </div>
-              <div className="text-4xl font-bold text-gray-400 mb-1">
-                {score.Draws}
-              </div>
-              <div className="text-sm text-gray-400">
-                Total Games: {totalGames}
-              </div>
-              <div className="text-xs text-gray-300 mt-1">Fair Play</div>
-            </div>
+            <GameCard
+              title="Draws"
+              value={score.Draws}
+              subtitle={`Total Games: ${totalGames}`}
+              note="Fair Play"
+              gradientFrom="from-gray-500/20"
+              gradientTo="to-gray-600/20"
+              borderColor="border-gray-500/30"
+              textColor="text-gray-300"
+              noteColor="text-gray-400"
+            />
 
-            <div className="bg-gradient-to-r from-green-500/20 to-green-600/20 p-6 rounded-2xl border border-green-500/30 text-center">
-              <div className="text-green-400 text-lg font-semibold mb-2">
-                {player2}
-              </div>
-              <div className="text-4xl font-bold text-green-400 mb-1">
-                {score.O}
-              </div>
-              <div className="text-sm text-gray-400">
-                {player2WinRate}% win rate
-              </div>
-              <div className="text-xs text-green-300 mt-1">Playing as O</div>
-            </div>
+            <GameCard
+              title={player2}
+              value={score.O}
+              subtitle={`${player2WinRate}% win rate`}
+              note="Playing as O"
+              gradientFrom="from-pink-500/20"
+              gradientTo="to-pink-600/20"
+              borderColor="border-pink-500/30"
+              textColor="text-pink-400"
+              noteColor="text-pink-300"
+            />
           </div>
 
           {/* Game Board (Right on large screens) */}
@@ -236,30 +199,13 @@ export default function Gameplay() {
             <div className="bg-[#1e1e2e] p-4 md:p-6 rounded-2xl shadow-xl border border-white/10">
               <div className="grid grid-cols-3 gap-3">
                 {board.map((cell, i) => (
-                  <div
+                  <GameTile
                     key={i}
-                    onClick={() => handleClick(i)}
-                    className={`aspect-square w-full flex items-center justify-center text-5xl font-bold rounded-2xl cursor-pointer transition-all duration-200
-            ${
-              cell
-                ? winningLine.includes(i)
-                  ? "bg-yellow-500/30 border-3 border-yellow-400 shadow-lg shadow-yellow-400/50"
-                  : cell === "X"
-                  ? "bg-blue-500/30 border-3 border-blue-400 shadow-lg shadow-blue-400/30"
-                  : "bg-green-500/30 border-3 border-green-400 shadow-lg shadow-green-400/30"
-                : "bg-[var(--hover)] hover:bg-[var(--primary)] hover:scale-105 border-3 border-white/10 hover:border-white/30 hover:shadow-lg hover:shadow-blue-400/20"
-            } ${cell ? "bounce-in" : ""}`}
-                  >
-                    {cell && (
-                      <span
-                        className={`${
-                          cell === "X" ? "text-blue-400" : "text-green-400"
-                        } drop-shadow-lg`}
-                      >
-                        {cell}
-                      </span>
-                    )}
-                  </div>
+                    value={cell}
+                    index={i}
+                    onClick={handleClick}
+                    highlight={winningLine.includes(i)}
+                  />
                 ))}
               </div>
             </div>
@@ -337,25 +283,7 @@ export default function Gameplay() {
               Recent Results
             </h3>
 
-            {gameHistory.length > 0 ? (
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {gameHistory
-                  .slice(-5)
-                  .reverse()
-                  .map((result, index) => (
-                    <div
-                      key={index}
-                      className="text-sm p-2 bg-[var(--hover)] rounded-lg"
-                    >
-                      {result}
-                    </div>
-                  ))}
-              </div>
-            ) : (
-              <p className="text-sm text-gray-400 italic">
-                No recent games played yet.
-              </p>
-            )}
+            <RecentResults history={gameHistory} />
           </div>
 
           {/* Achievement Progress */}

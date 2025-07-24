@@ -1,10 +1,11 @@
 "use client";
 
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { User, Gamepad2, ArrowRight, Home, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { Gamepad2, Home } from "lucide-react";
+import { GameModeSelector, PlayerInput, StartGameButton } from "@/components";
 
 export default function NewGame() {
   const router = useRouter();
@@ -12,8 +13,10 @@ export default function NewGame() {
   const [player2, setPlayer2] = useState("");
   const [gameMode, setGameMode] = useState("classic");
 
+  const isReady = player1.trim() && player2.trim();
+
   const startGame = () => {
-    if (player1 && player2) {
+    if (isReady) {
       router.push(
         `/gameplay?player1=${encodeURIComponent(
           player1
@@ -21,8 +24,6 @@ export default function NewGame() {
       );
     }
   };
-
-  const isReady = player1.trim() && player2.trim();
 
   return (
     <>
@@ -48,93 +49,30 @@ export default function NewGame() {
             </p>
           </div>
 
-          {/* Game Mode Selection */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-300 mb-3">
-              <Sparkles className="w-4 h-4 inline mr-2" />
-              Game Mode
-            </label>
-            <div className="grid grid-cols-1 gap-2">
-              <button
-                onClick={() => setGameMode("classic")}
-                className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                  gameMode === "classic"
-                    ? "border-purple-500 bg-purple-500/20 text-purple-300"
-                    : "border-gray-600 bg-[var(--card)] hover:border-purple-400"
-                }`}
-              >
-                <div className="text-left">
-                  <div className="font-semibold">🎯 Classic Mode</div>
-                  <div className="text-sm text-gray-400">
-                    Traditional 3x3 grid gameplay
-                  </div>
-                </div>
-              </button>
-            </div>
-          </div>
+          {/* Game Mode */}
+          <GameModeSelector selected={gameMode} onSelect={setGameMode} />
 
-          {/* Player Input Form */}
+          {/* Player Input */}
           <div className="space-y-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                <User className="w-4 h-4 inline mr-2" />
-                Player 1 (X)
-              </label>
-              <input
-                className="w-full p-4 bg-[var(--card)] border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors duration-200"
-                placeholder="Enter Player 1 name..."
-                value={player1}
-                onChange={(e) => setPlayer1(e.target.value)}
-                maxLength={20}
-              />
-              {player1 && (
-                <div className="mt-2 text-sm text-blue-400 bounce-in">
-                  ✓ {player1} will play as X
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                <User className="w-4 h-4 inline mr-2" />
-                Player 2 (O)
-              </label>
-              <input
-                className="w-full p-4 bg-[var(--card)] border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-green-500 focus:outline-none transition-colors duration-200"
-                placeholder="Enter Player 2 name..."
-                value={player2}
-                onChange={(e) => setPlayer2(e.target.value)}
-                maxLength={20}
-              />
-              {player2 && (
-                <div className="mt-2 text-sm text-green-400 bounce-in">
-                  ✓ {player2} will play as O
-                </div>
-              )}
-            </div>
+            <PlayerInput
+              label="Player 1 (X)"
+              value={player1}
+              onChange={setPlayer1}
+              playerIconColor="text-blue-400"
+              confirmationText="will play as X"
+            />
+            <PlayerInput
+              label="Player 2 (O)"
+              value={player2}
+              onChange={setPlayer2}
+              playerIconColor="text-green-400"
+              confirmationText="will play as O"
+            />
           </div>
 
           {/* Action Buttons */}
           <div className="space-y-3">
-            <button
-              onClick={startGame}
-              disabled={!isReady}
-              className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold text-lg transition-all duration-300 ${
-                isReady
-                  ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transform hover:scale-105 pulse-glow"
-                  : "bg-gray-700 text-gray-400 cursor-not-allowed"
-              }`}
-            >
-              {isReady ? (
-                <>
-                  <span>Start Battle</span>
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              ) : (
-                <span>Enter Both Player Names</span>
-              )}
-            </button>
-
+            <StartGameButton onClick={startGame} isReady={!!isReady} />
             <Link
               href="/"
               className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[var(--card)] hover:bg-[var(--hover)] border border-[var(--border)] text-gray-300 rounded-xl transition-all duration-200"
