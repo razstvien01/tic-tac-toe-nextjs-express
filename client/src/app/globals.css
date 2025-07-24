@@ -1,25 +1,26 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #2563eb;
-  --secondary: #16a34a;
-  --hover: #374151; 
+  --background: #0a0a0a; /* gray-900 */
+  --foreground: #ededed;
+  --primary: #2563eb; /* blue-600 */
+  --primary-hover: #1d4ed8; /* blue-700 */
+  --secondary: #16a34a; /* green-600 */
+  --secondary-hover: #15803d; /* green-700 */
+  --hover: #374151; /* gray-700 */
+
+  --font-sans: 'Arial', sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --primary: #1d4ed8;
-    --secondary: #15803d;
-    --hover: #4b5563; 
   }
-}
-
-body {
-  @apply bg-[var(--background)] text-[var(--foreground)] font-sans;
 }
