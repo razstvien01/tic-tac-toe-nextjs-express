@@ -3,10 +3,11 @@
 import { GameSession } from "@/models/game-session.model";
 import { formatDate } from "@/utils/date.utils";
 import { getSessionWinner } from "@/utils/game.util";
-import { Trophy, Crown, Calendar } from "lucide-react";import React from "react";
+import { Trophy, Crown, Calendar } from "lucide-react";
+import React from "react";
 
 interface GameHistorySectionProps {
-  gameSessions: GameSession[];
+  gameSessions: GameSession[] | null;
   loading: boolean;
 }
 
@@ -14,7 +15,16 @@ export const GameHistorySection: React.FC<GameHistorySectionProps> = ({
   gameSessions,
   loading,
 }) => {
-  if (!gameSessions) return null;
+  if (!gameSessions) {
+    return (
+      <div className="text-center py-12 text-yellow-400">
+        <p className="text-lg font-semibold">
+          Unable to fetch game history. This may be due to backend connection
+          issues on the free Render tier. Please try again later.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mb-16 mt-16">
@@ -29,7 +39,7 @@ export const GameHistorySection: React.FC<GameHistorySectionProps> = ({
           <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-gray-400">Loading game history...</p>
         </div>
-      ) : gameSessions.length === 0 ? (
+      ) : gameSessions?.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">🎮</div>
           <h3 className="text-2xl font-bold text-gray-300 mb-2">
@@ -41,7 +51,7 @@ export const GameHistorySection: React.FC<GameHistorySectionProps> = ({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gameSessions.map((session, index) => (
+          {gameSessions?.toReversed().map((session, index) => (
             <div
               key={session.id}
               className="bg-[var(--card)] p-6 rounded-2xl border border-[var(--border)] hover:border-blue-500/50 transition-all duration-300 hover:transform hover:scale-105"
