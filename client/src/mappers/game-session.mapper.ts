@@ -10,5 +10,5 @@ export function mapGameSessionDtoToModel(dto: GameSessionDto): GameSession {
 }
 
 export function mapGameSessionsDtoToModels(dtos: GameSessionDto[]) {
-  return dtos.map(mapGameSessionDtoToModel);
+  return dtos?.map(mapGameSessionDtoToModel);
 }
