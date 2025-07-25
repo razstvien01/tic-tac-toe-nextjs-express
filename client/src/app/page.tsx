@@ -4,70 +4,54 @@ import Head from "next/head";
 import Link from "next/link";
 import { Trophy, Play, Calendar, Crown } from "lucide-react";
 import { GradientButton } from "@/components";
-import { format } from "date-fns";
 import Footer from "@/components/Footer";
-
-type Round = {
-  winner?: string;
-  moves?: unknown[];
-};
-
-type GameSession = {
-  id: number;
-  player1Name: string;
-  player2Name: string;
-  startTime: string; // ISO string
-  endTime: string; // ISO string
-  rounds: Round[]; // Define Round type below
-  finalScore: {
-    player1Wins: number;
-    player2Wins: number;
-    draws: number;
-  };
-};
-
-// Dummy data for demonstration
-const gameSessions: GameSession[] = [
-  {
-    id: 1,
-    player1Name: "You",
-    player2Name: "AI",
-    startTime: "2025-07-21T12:30:00Z",
-    endTime: "2025-07-21T12:45:00Z",
-    rounds: [{}, {}, {}],
-    finalScore: {
-      player1Wins: 1,
-      player2Wins: 1,
-      draws: 1,
-    },
-  },
-  {
-    id: 2,
-    player1Name: "Charlie",
-    player2Name: "Dana",
-    startTime: "2025-07-22T14:00:00Z",
-    endTime: "2025-07-22T14:15:00Z",
-    rounds: [{}],
-    finalScore: {
-      player1Wins: 0,
-      player2Wins: 1,
-      draws: 0,
-    },
-  },
-];
-
-function getSessionWinner(session: GameSession) {
-  const { player1Wins, player2Wins } = session.finalScore;
-  if (player1Wins === player2Wins) return "Tie";
-  return player1Wins > player2Wins ? session.player1Name : session.player2Name;
-}
-
-function formatDate(date: string) {
-  return format(new Date(date), "MMM dd, yyyy – hh:mm a");
-}
+import { GameSessionDto } from "@/dtos/game-session.dto";
+import { GameSession } from "@/models/game-session.model";
+import { mapGameSessionsDtoToModels } from "@/mappers/game-session.mapper";
+import { formatDate } from "@/utils/date.utils";
 
 export default function Home() {
   const loading = false;
+
+  const gameSessionDtos: GameSessionDto[] = [
+    {
+      id: 1,
+      player1Name: "You",
+      player2Name: "AI",
+      startTime: "2025-07-21T12:30:00Z",
+      endTime: "2025-07-21T12:45:00Z",
+      rounds: [{}, {}, {}],
+      finalScore: {
+        player1Wins: 1,
+        player2Wins: 1,
+        draws: 1,
+      },
+    },
+    {
+      id: 2,
+      player1Name: "Charlie",
+      player2Name: "Dana",
+      startTime: "2025-07-22T14:00:00Z",
+      endTime: "2025-07-22T14:15:00Z",
+      rounds: [{}],
+      finalScore: {
+        player1Wins: 0,
+        player2Wins: 1,
+        draws: 0,
+      },
+    },
+  ];
+
+  const gameSessions: GameSession[] =
+    mapGameSessionsDtoToModels(gameSessionDtos);
+
+  const getSessionWinner = (session: GameSession) => {
+    const { player1Wins, player2Wins } = session.finalScore;
+    if (player1Wins === player2Wins) return "Tie";
+    return player1Wins > player2Wins
+      ? session.player1Name
+      : session.player2Name;
+  };
 
   return (
     <>
