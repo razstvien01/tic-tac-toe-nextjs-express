@@ -25,6 +25,7 @@ export default function Gameplay() {
   const [showWinner, setShowWinner] = useState(true);
   const [movesPerRound, setMovesPerRound] = useState<string[][]>([]);
   const [startTime, setStartTime] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const winPatterns = [
     [0, 1, 2],
@@ -102,7 +103,15 @@ export default function Gameplay() {
       new Date().toISOString()
     );
 
-    await saveGameSession(session);
+    try {
+      await saveGameSession(session);
+      router.push("/");
+    } catch (err) {
+      console.error("Failed to save session:", err);
+      setErrorMessage(
+        "Failed to save session (Render backend may be asleep). Try again later."
+      );
+    }
 
     router.push("/");
   };
@@ -135,6 +144,18 @@ export default function Gameplay() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-gray-900 text-[var(--foreground)] p-4 relative overflow-hidden">
+        {errorMessage && (
+          <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow">
+            {errorMessage}
+            <button
+              className="ml-2 text-sm underline"
+              onClick={() => setErrorMessage("")}
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
         {/* Animated background */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-10 right-10 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
