@@ -1,4 +1,4 @@
-import { API_ROUTES } from "@/constants/api-routes";
+import { API_ROUTES } from "@/constants";
 import { InGameSession } from "@/models/in-game-session.model";
 import axios from "axios";
 
