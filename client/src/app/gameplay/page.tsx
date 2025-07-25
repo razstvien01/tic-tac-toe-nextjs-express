@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RotateCcw, Home, Target, Zap } from "lucide-react";
 import Link from "next/link";
 import { GameCard, GameTile, WinnerModal, RecentResults } from "@/components";
@@ -24,6 +24,7 @@ export default function Gameplay() {
   const [roundNumber, setRoundNumber] = useState(1);
   const [showWinner, setShowWinner] = useState(true);
   const [movesPerRound, setMovesPerRound] = useState<string[][]>([]);
+  const [startTime, setStartTime] = useState<string | null>(null);
 
   const winPatterns = [
     [0, 1, 2],
@@ -96,7 +97,7 @@ export default function Gameplay() {
       score,
       winners,
       roundNumber,
-      new Date(Date.now() - totalGames * 60000).toISOString(), // fake startTime
+      startTime ?? new Date().toISOString(),
       movesPerRound,
       new Date().toISOString()
     );
@@ -133,6 +134,11 @@ export default function Gameplay() {
     totalGames > 0 ? Math.round((score.X / totalGames) * 100) : 0;
   const player2WinRate =
     totalGames > 0 ? Math.round((score.O / totalGames) * 100) : 0;
+
+  useEffect(() => {
+    setStartTime(new Date().toISOString());
+    return () => {};
+  }, []);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-gray-900 text-[var(--foreground)] p-4 relative overflow-hidden">
