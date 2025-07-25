@@ -3,9 +3,7 @@
 import { GameSession } from "@/models/game-session.model";
 import { formatDate } from "@/utils/date.utils";
 import { getSessionWinner } from "@/utils/game.util";
-import { Trophy, Play, Crown, Calendar } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { Trophy, Crown, Calendar } from "lucide-react";import React from "react";
 
 interface GameHistorySectionProps {
   gameSessions: GameSession[];
@@ -16,6 +14,8 @@ export const GameHistorySection: React.FC<GameHistorySectionProps> = ({
   gameSessions,
   loading,
 }) => {
+  if (!gameSessions) return null;
+
   return (
     <div className="mb-16 mt-16">
       <div className="flex items-center gap-3 mb-6">
@@ -38,13 +38,6 @@ export const GameHistorySection: React.FC<GameHistorySectionProps> = ({
           <p className="text-gray-400 mb-6">
             Start your first game to see the history here!
           </p>
-          <Link
-            href="/new-game"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors duration-200"
-          >
-            <Play className="w-5 h-5" />
-            Play Your First Game
-          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
