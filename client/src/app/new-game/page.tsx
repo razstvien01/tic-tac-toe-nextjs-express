@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Gamepad2, Home } from "lucide-react";
 import { GameModeSelector, PlayerInput, StartGameButton } from "@/components";
+import { GameSetup } from "@/models/game-setup.model";
 
 export default function NewGame() {
   const router = useRouter();
@@ -16,12 +17,9 @@ export default function NewGame() {
   const isReady = player1.trim() && player2.trim();
 
   const startGame = () => {
-    if (isReady) {
-      router.push(
-        `/gameplay?player1=${encodeURIComponent(
-          player1
-        )}&player2=${encodeURIComponent(player2)}&mode=${gameMode}`
-      );
+    const setup = new GameSetup(player1, player2, gameMode);
+    if (setup.isValid()) {
+      router.push(`/gameplay?${setup.toQueryParams()}`);
     }
   };
 
