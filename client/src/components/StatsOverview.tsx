@@ -8,16 +8,16 @@ import StatCard from "./StatCard";
 import { GameSession } from "@/models/game-session.model";
 
 type StatsOverviewProps = {
-  gameSessions: GameSession[];
+  gameSessions: GameSession[] | null;
 };
 
 export default function StatsOverview({ gameSessions }: StatsOverviewProps) {
-  if (gameSessions.length === 0) return null;
+  if (gameSessions && gameSessions.length === 0) return null;
 
-  const totalGames = getTotalGames(gameSessions);
-  const totalRounds = getTotalRounds(gameSessions);
-  const avgRounds = getAverageRounds(gameSessions);
-  const decisiveGames = getDecisiveGames(gameSessions);
+  const totalGames = (gameSessions) ? getTotalGames(gameSessions) : 0;
+  const totalRounds = (gameSessions) ? getTotalRounds(gameSessions) : 0;
+  const avgRounds = (gameSessions) ? getAverageRounds(gameSessions) : 0;
+  const decisiveGames = (gameSessions) ? getDecisiveGames(gameSessions) : 0;
 
   return (
     <section className="mt-16 text-left mb-16">
