@@ -7,3 +7,6 @@ export { default as GameCard } from "./GameCard";
 export { default as GameTile } from "./GameTile";
 export { default as WinnerModal } from "./WinnerModal";
 export { default as RecentResults } from "./RecentResults";
+export { default as Footer } from "./Footer";
+export { default as StatCard } from "./StatCard";
+export { default as StatsOverview } from "./StatsOverview";
