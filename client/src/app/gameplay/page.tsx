@@ -6,6 +6,7 @@ import { RotateCcw, Home, Target, Zap } from "lucide-react";
 import Link from "next/link";
 import { GameCard, GameTile, WinnerModal, RecentResults } from "@/components";
 import { InGameSession } from "@/models/in-game-session.model";
+import axios from "axios";
 
 export default function Gameplay() {
   const router = useRouter();
@@ -101,10 +102,10 @@ export default function Gameplay() {
     );
 
     try {
-      await fetch("/api/save-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(session.toDto()),
+      await axios.post("/api/save-session", session.toDto(), {
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
     } catch (err) {
       console.error("Error saving session:", err);
