@@ -19,8 +19,7 @@ export const getGameSession = async () => {
   try {
     const result = await axios.get(API_ROUTES.GET_SESSIONS);
     return result.data;
-  } catch (error) {
-    console.error("Error getting sessions:", error);
-    throw error;
+  } catch {
+    return null;
   }
 };
