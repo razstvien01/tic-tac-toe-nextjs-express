@@ -40,8 +40,8 @@ export default async function Home() {
           <div className="flex justify-center mb-6">
             <div className="flex items-start md:items-center gap-2 text-yellow-400 text-sm max-w-md text-left">
               <span>
-                Note: The backend is hosted on a free tier, which may cause
-                delayed or unstable connections.
+                Note: Backend runs on a free instance and may be slow to start
+                after inactivity.
               </span>
             </div>
           </div>
