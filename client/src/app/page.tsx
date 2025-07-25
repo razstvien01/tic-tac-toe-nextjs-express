@@ -37,6 +37,15 @@ export default async function Home() {
             Challenge your friends in the classic strategy game!
           </p>
 
+          <div className="flex justify-center mb-6">
+            <div className="flex items-start md:items-center gap-2 text-yellow-400 text-sm max-w-md text-left">
+              <span>
+                Note: The backend is hosted on a free tier, which may cause
+                delayed or unstable connections.
+              </span>
+            </div>
+          </div>
+
           {/* CTA */}
           <GradientButton href="/new-game" icon={<Play />}>
             Start New Game
