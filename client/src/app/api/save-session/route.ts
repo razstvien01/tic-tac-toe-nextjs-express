@@ -4,9 +4,7 @@ import axios from "axios";
 export async function POST(request: Request): Promise<Response> {
   try {
     const body = await request.json();
-
-    console.log(body);
-
+    
     await axios.post(`${ENV.EXPRESS_BACKEND_URL}/api/save-session`, body);
 
     return new Response(JSON.stringify({ message: "Session saved" }), {
