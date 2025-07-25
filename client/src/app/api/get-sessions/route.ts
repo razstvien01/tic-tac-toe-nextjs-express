@@ -1,4 +1,4 @@
-import ENV from "@/constants/env";
+import { ENV } from "@/constants";
 import axios from "axios";
 
 export async function GET(): Promise<Response> {
