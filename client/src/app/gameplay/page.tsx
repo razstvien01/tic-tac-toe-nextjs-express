@@ -2,9 +2,10 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { RotateCcw, Home, Crown, Target, Zap } from "lucide-react";
+import { RotateCcw, Home, Target, Zap } from "lucide-react";
 import Link from "next/link";
 import { GameCard, GameTile, WinnerModal, RecentResults } from "@/components";
+import { InGameSession } from "@/models/in-game-session.model";
 
 export default function Gameplay() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function Gameplay() {
   const [gameHistory, setGameHistory] = useState<string[]>([]);
   const [roundNumber, setRoundNumber] = useState(1);
   const [showWinner, setShowWinner] = useState(true);
+  const [movesPerRound, setMovesPerRound] = useState<string[][]>([]);
 
   const winPatterns = [
     [0, 1, 2],
@@ -54,15 +56,14 @@ export default function Gameplay() {
 
     const result = checkWinner(newBoard);
     if (result) {
-      setWinner(result);
-      setShowWinner(true);
       const winnerName =
         result === "X" ? player1 : result === "O" ? player2 : "Draw";
+
       setGameHistory((prev) => [
         ...prev,
         `Round ${roundNumber}: ${winnerName}`,
       ]);
-
+      setMovesPerRound((prev) => [...prev, newBoard]);
       setScore((prev) => {
         if (result === "Draw") return { ...prev, Draws: prev.Draws + 1 };
         return {
@@ -70,27 +71,40 @@ export default function Gameplay() {
           [result as "X" | "O"]: prev[result as "X" | "O"] + 1,
         };
       });
+
+      setWinner(result);
+      setShowWinner(true);
     } else {
       setTurn((prev) => (prev === "X" ? "O" : "X"));
     }
   };
 
   const stopGame = async () => {
-    const payload = {
+    const winners = gameHistory.map((entry) =>
+      entry.includes("Draw")
+        ? "Draw"
+        : entry.includes(player1)
+        ? player1
+        : player2
+    );
+
+    const session = new InGameSession(
       player1,
       player2,
       gameMode,
       score,
-      gameHistory,
-      roundsPlayed: roundNumber,
-      endedAt: new Date().toISOString(),
-    };
+      winners,
+      roundNumber,
+      new Date(Date.now() - totalGames * 60000).toISOString(), // fake startTime
+      movesPerRound,
+      new Date().toISOString()
+    );
 
     try {
       await fetch("/api/save-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(session.toDto()),
       });
     } catch (err) {
       console.error("Error saving session:", err);
