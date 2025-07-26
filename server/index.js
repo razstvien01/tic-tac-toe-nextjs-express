@@ -2,10 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db");
 const gameSessionRoutes = require("./routes/gameSessionRoutes");
+require("dotenv").config({ path: ".env.local" });
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.NEXT_PUBLIC_BASE_URL,
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 connectDB();
