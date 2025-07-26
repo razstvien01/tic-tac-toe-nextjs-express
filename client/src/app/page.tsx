@@ -1,3 +1,5 @@
+"use client";
+
 import Head from "next/head";
 import { Play } from "lucide-react";
 import { GradientButton, StatsOverview } from "@/components";
@@ -6,11 +8,28 @@ import { GameSessionDto } from "@/dtos/game-session.dto";
 import { GameHistorySection } from "@/components/GameHistorySection";
 import { getGameSession } from "@/services/sessionService";
 import { mapGameSessionsDtoToModels } from "@/mappers/game-session.mapper";
+import { useEffect, useState } from "react";
+import { GameSession } from "@/models/game-session.model";
 
-export default async function Home() {
-  const loading = false;
-  const gameSessionDto: GameSessionDto[] = await getGameSession();
-  const gameSessions = mapGameSessionsDtoToModels(gameSessionDto);
+export default function Home() {
+  const [gameSessions, setGameSessions] = useState<GameSession[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      setLoading(true);
+      const sessionDtos: GameSessionDto[] | null = await getGameSession();
+
+      if (sessionDtos) {
+        const mapped = mapGameSessionsDtoToModels(sessionDtos);
+        setGameSessions(mapped);
+      }
+
+      setLoading(false);
+    };
+
+    fetchSessions();
+  }, []);
 
   return (
     <>
