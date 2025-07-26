@@ -189,6 +189,7 @@ export default function Gameplay() {
                 setShowWinner(false);
               }}
               onStop={stopGame}
+              isSaving={isSaving}
             />
           )}
 

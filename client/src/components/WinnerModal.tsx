@@ -6,6 +6,7 @@ interface WinnerModalProps {
   onClose: () => void;
   onContinue: () => void;
   onStop: () => void;
+  isSaving: boolean;
 }
 
 export default function WinnerModal({
@@ -14,6 +15,7 @@ export default function WinnerModal({
   onClose,
   onContinue,
   onStop,
+  isSaving,
 }: WinnerModalProps) {
   if (!winner) return null;
 
@@ -46,9 +48,14 @@ export default function WinnerModal({
             </button>
             <button
               onClick={onStop}
-              className="px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700"
+              disabled={isSaving}
+              className={`px-6 py-3 rounded-lg font-semibold ${
+                isSaving
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700"
+              } text-white transition-all`}
             >
-              Stop
+              {isSaving ? "Saving..." : "Stop"}
             </button>
           </div>
         </div>
