@@ -26,6 +26,7 @@ export default function Gameplay() {
   const [movesPerRound, setMovesPerRound] = useState<string[][]>([]);
   const [startTime, setStartTime] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   const winPatterns = [
     [0, 1, 2],
@@ -83,6 +84,7 @@ export default function Gameplay() {
   };
 
   const stopGame = async () => {
+    setIsSaving(true); // Start loading
     const winners = gameHistory.map((entry) =>
       entry.includes("Draw")
         ? "Draw"
@@ -111,9 +113,9 @@ export default function Gameplay() {
       setErrorMessage(
         "Failed to save session (Render backend may be asleep). Try again later."
       );
+    } finally {
+      setIsSaving(false);
     }
-
-    router.push("/");
   };
 
   const resetBoard = () => {
