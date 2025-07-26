@@ -12,8 +12,6 @@ export default async function Home() {
   const gameSessionDto: GameSessionDto[] = await getGameSession();
   const gameSessions = mapGameSessionsDtoToModels(gameSessionDto);
 
-  const hasBackendIssue = gameSessions.length === 0;
-
   return (
     <>
       <Head>
@@ -52,14 +50,6 @@ export default async function Home() {
           <GradientButton href="/new-game" icon={<Play />}>
             Start New Game
           </GradientButton>
-
-          {hasBackendIssue && (
-            <div className="bg-yellow-800 text-yellow-300 border border-yellow-500 rounded-md px-4 py-3 mb-6 text-sm max-w-xl mx-auto">
-              We {"couldn't"} retrieve game session data. The backend may still
-              be waking up or there might be an issue with the server. Please
-              refresh after a few seconds.
-            </div>
-          )}
 
           <StatsOverview gameSessions={gameSessions} />
 
