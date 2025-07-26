@@ -22,11 +22,19 @@ export const getGameSession = async () => {
   console.log("Fetching game sessions from backend...");
 
   try {
-    const result = await axios.get(API_ROUTES.GET_SESSIONS);
+    const res = await fetch(API_ROUTES.GET_SESSIONS, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
 
-    console.log("Fetched game sessions:", result.data?.length || 0);
+    const data = await res.json();
 
-    return result.data;
+    console.log("Fetched game sessions:", data?.length || 0);
+
+    return data;
   } catch {
     return null;
   }
